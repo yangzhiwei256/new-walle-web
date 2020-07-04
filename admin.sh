@@ -60,7 +60,7 @@ function SystemName() {
         debian|ubuntu|devuan)
             echo "安装/更新可能缺少的依赖: libmysqld-dev libmysqlclient-dev python-dev python-virtualenv python-pip"
             sudo apt update -y
-            sudo apt install -y libmysqld-dev libmysqlclient-dev python-dev python-virtualenv python-pip
+            sudo apt install -y default-libmysqld-dev default-libmysqlclient-dev python-dev python-virtualenv python-pip
             ;;
 
         raspbian)
