@@ -3,13 +3,15 @@
 import os
 from datetime import timedelta
 
-
+# walle 基础配置
 class Config(object):
     """Base configuration."""
     VERSION = '2.0.1'
 
     SECRET_KEY = os.environ.get('WALLE_SECRET', 'secret-key')
     APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+
+    # 项目根路径
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
     ASSETS_DEBUG = False

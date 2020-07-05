@@ -13,6 +13,7 @@ import os
 from walle.config.settings import Config
 
 
+# 生产环境配置
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
@@ -22,15 +23,15 @@ class ProdConfig(Config):
     # 服务启动 @TODO
     # HOST 修改为与 nginx server_name 一致.
     # 后续在web hooks与通知中用到此域名.
-    HOST = 'admin.walle-web.io'
+    # HOST = 'admin.walle-web.io'
     PORT = 5000
     # https True, http False
     SSL = False
 
-    # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle?charset=utf8'
+    # 数据库设置: 数据库驱动采用pymysql
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://walle:walle@localhost:3306/walle?charset=utf8'
 
-    # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
+    # 本地代码检出路径（用户查询分支, 编译, 打包)
     CODE_BASE = '/tmp/walle/codebase/'
 
     # 日志存储路径 @TODO

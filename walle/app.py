@@ -33,13 +33,15 @@ from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
 from walle.service.websocket import WalleSocketIO
 
-
+# 创建Flask APP
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split('.')[0])
+    app = Flask(__name__.split('.')[0], template_folder="fe", static_url_path="/static", static_folder="fe/static")
+    
+    # 配置初始化
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
@@ -76,6 +78,7 @@ def create_app(config_object=ProdConfig):
     return app
 
 
+# 注册Flask扩展
 def register_extensions(app):
     """Register Flask extensions."""
     bcrypt.init_app(app)
@@ -87,7 +90,6 @@ def register_extensions(app):
     @login_manager.user_loader
     def load_user(user_id):
         current_app.logger.info(user_id)
-
         return UserModel.query.get(user_id)
 
     @login_manager.unauthorized_handler
@@ -96,14 +98,12 @@ def register_extensions(app):
         return BaseAPI.ApiResource.json(code=Code.unlogin)
 
     login_manager.init_app(app)
-
     migrate.init_app(app, db)
     mail.init_app(app)
     permission.init_app(app)
-
     return app
 
-
+# 注册蓝图
 def register_blueprints(app):
     """Register Flask blueprints."""
     api = Api(app)
@@ -121,10 +121,10 @@ def register_blueprints(app):
     api.add_resource(RepoApi.RepoAPI, '/api/repo/<string:action>/', endpoint='repo')
     api.add_resource(TaskAPI.TaskAPI, '/api/task/', '/api/task/<int:task_id>', '/api/task/<int:task_id>/<string:action>', endpoint='task')
     api.add_resource(EnvironmentAPI.EnvironmentAPI, '/api/environment/', '/api/environment/<int:env_id>', endpoint='environment')
-
     return None
 
 
+# 注册错误处理器
 def register_errorhandlers(app):
     """Register error handlers."""
 
