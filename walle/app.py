@@ -32,6 +32,7 @@ from walle.service.error import WalleError
 from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
 from walle.service.websocket import WalleSocketIO
+from walle.config.settings import Config
 
 # 创建Flask APP
 def create_app(config_object=ProdConfig):
@@ -39,7 +40,10 @@ def create_app(config_object=ProdConfig):
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split('.')[0], template_folder="fe", static_url_path="/static", static_folder="fe/static")
+    app = Flask(__name__.split('.')[0], 
+    template_folder=os.path.join(Config.PROJECT_ROOT, 'fe'), 
+    static_url_path="/static", 
+    static_folder=os.path.join(Config.PROJECT_ROOT, 'fe/static'))
     
     # 配置初始化
     app.config.from_object(config_object)
@@ -62,8 +66,12 @@ def create_app(config_object=ProdConfig):
         db.session.remove()
 
     @app.route('/api/websocket')
-    def index():
+    def socketio():
         return render_template('socketio.html')
+
+    @app.route("/index")
+    def index():
+        return render_template("index.html")
 
     # 单元测试不用开启 websocket
     if app.config.get('ENV') != 'test':

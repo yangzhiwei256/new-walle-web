@@ -53,20 +53,20 @@ function SystemName() {
                 wget https://bootstrap.pypa.io/3.3/get-pip.py
                 python get-pip.py
             fi
-            echo "安装/更新可能缺少的依赖: mysql-community-devel gcc gcc-c++ python-devel"
-            sudo yum install -y mysql-devel gcc gcc-c++ python-devel MySQL-python
+            echo "安装/更新可能缺少的依赖: gcc gcc-c++ python-devel"
+            sudo yum install -y gcc gcc-c++ python-devel
             ;;
 
         debian|ubuntu|devuan)
-            echo "安装/更新可能缺少的依赖: libmysqld-dev libmysqlclient-dev python-dev python-virtualenv python-pip"
+            echo "安装/更新可能缺少的依赖: python-dev python-virtualenv python-pip"
             sudo apt update -y
-            sudo apt install -y default-libmysqld-dev default-libmysqlclient-dev python-dev python-virtualenv python-pip
+            sudo apt install -y python-dev python-virtualenv python-pip
             ;;
 
         raspbian)
             echo "安装/更新可能缺少的依赖"
             sudo apt update -y
-            sudo apt install -y gcc g++ python-dev virtualenv python-pip libpq-dev libffi-dev libssl-dev libmariadbd18 libmariadbd-dev
+            sudo apt install -y gcc g++ python-dev virtualenv python-pip libpq-dev libffi-dev libssl-dev
             ;;
 
         *)
