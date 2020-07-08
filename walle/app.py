@@ -7,7 +7,6 @@ import logging
 import sys
 import os
 import threading
-
 from flask import Flask, render_template, current_app
 from flask_restful import Api
 from walle import commands
@@ -25,25 +24,26 @@ from walle.api import server as ServerAPI
 from walle.api import space as SpaceAPI
 from walle.api import task as TaskAPI
 from walle.api import user as UserAPI
-from walle.config.settings_prod import ProdConfig
 from walle.model.user import UserModel, AnonymousUser
 from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
 from walle.service.websocket import WalleSocketIO
-from walle.config.settings import Config
+from walle.config import CommonConfig
+from walle.config import ProductionConfig
+
 
 # 创建Flask APP
-def create_app(config_object=ProdConfig):
+def create_app(config_object=ProductionConfig):
     """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__.split('.')[0], 
-    template_folder=os.path.join(Config.PROJECT_ROOT, 'fe'), 
+    template_folder=os.path.join(CommonConfig.PROJECT_ROOT, 'fe'), 
     static_url_path="/static", 
-    static_folder=os.path.join(Config.PROJECT_ROOT, 'fe/static'))
+    static_folder=os.path.join(CommonConfig.PROJECT_ROOT, 'fe/static'))
     
     # 配置初始化
     app.config.from_object(config_object)
