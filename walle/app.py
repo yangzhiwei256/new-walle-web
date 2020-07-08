@@ -90,28 +90,44 @@ def create_app(config_object=ProductionConfig):
 def register_extensions(app):
     """Register Flask extensions."""
     bcrypt.init_app(app)
+
+    # 创建 sqlalchemy对象，用于数据库操作 
     db.init_app(app)
+
+    # csrf: 跨域安全防护
     csrf_protect.init_app(app)
+
+    # session保护强度
     login_manager.session_protection = 'strong'
+
+    # 匿名用户访问
     login_manager.anonymous_user = AnonymousUser
 
+    # 加载用户信息
     @login_manager.user_loader
     def load_user(user_id):
         current_app.logger.info(user_id)
         return UserModel.query.get(user_id)
 
+    # 未授权处理器
     @login_manager.unauthorized_handler
     def unauthorized():
-        # TODO log
         return BaseAPI.ApiResource.json(code=Code.unlogin)
 
+    # flask login manager初始化
     login_manager.init_app(app)
+
+    # flask 数据迁移初始化
     migrate.init_app(app, db)
+
+    # 邮箱初始化
     mail.init_app(app)
+
+    ## 授权初始化
     permission.init_app(app)
     return app
 
-# 注册蓝图
+# 注册蓝图：Flask-Restful
 def register_blueprints(app):
     """Register Flask blueprints."""
     api = Api(app)
@@ -138,7 +154,6 @@ def register_errorhandlers(app):
 
     @app.errorhandler(WalleError)
     def render_error(error):
-        # response 的 json 内容为自定义错误代码和错误信息
         app.logger.error(error, exc_info=1)
         return error.render_error()
 
@@ -165,7 +180,6 @@ def register_commands(app):
 
 
 def register_logging(app):
-    # TODO https://blog.csdn.net/zwxiaoliu/article/details/80890136
     # email errors to the administrators
     import logging
     from logging.handlers import RotatingFileHandler
