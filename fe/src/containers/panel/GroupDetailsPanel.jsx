@@ -44,7 +44,7 @@ class Panel extends Component {
         roleList: [],
     };
 
-    static TYPE = TYPE;
+    // static TYPE = TYPE;
 
     constructor(props) {
         super(props);

@@ -24,6 +24,7 @@
         "react"
     ],
     "rules": {
+        "linebreak-style": [0 ,"error", "windows"],
         // 警告
         "semi": 1,
         "no-unused-vars": 1,
